@@ -12,12 +12,14 @@
     "@heroicons/vue": "^1.0.5",
     "@popperjs/core": "2.11.6",
     "core-js": "^3.8.3",
+    "file-loader": "^6.2.0",
     "flowbite": "^1.6.3",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.37",
     "vue": "^3.2.13",
     "vue-meta": "^2.4.0",
-    "vue-moment": "^4.1.0"
+    "vue-moment": "^4.1.0",
+    "vue-svg-loader": "^0.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
