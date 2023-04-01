@@ -1,24 +1,11 @@
-# vue-weather
+# Compare Time & Weather at Location app 2.0
+- Open Weather Map API (By name and geocoding latitude & longitude)
+- Tailwind CSS
+- moment-timezone by Moment.js
+- icons by Heroicons
+- animated weather icons by Meteocons https://github.com/basmilius/weather-icons
+- tooltip by PopperJS
+- switch to dark mode
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![alt text](https://github.com/farahasylah/Vue-Timezone-Weather-Compare-2.0/blob/master/screenshots/locations.jpg?raw=true)
+![alt text](https://github.com/farahasylah/Vue-Timezone-Weather-Compare-2.0/blob/master/screenshots/darkmode.jpg?raw=true)
