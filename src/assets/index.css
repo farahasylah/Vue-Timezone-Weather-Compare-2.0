@@ -9,7 +9,7 @@
     box-sizing: border-box;
 }
 main {
-    min-height: 100vh;
+    min-height: calc(100vh - 2rem);
     transition: all 0.5s ease;
 }
 .initial{
@@ -24,13 +24,18 @@ main {
         padding-right: 8%;
     }
 }
+.dark .weather-box {
+    background: linear-gradient(180deg, #06050a33, #06050a00);
+
+}
 .weather-box {
     display: inline-block;
     padding: 20px 30px;
-    border-radius: 10px;
+    border-radius: 50% 50% 10px 10px;
     margin-top: 20px;
-    min-width: 250px;
+    background: linear-gradient(180deg, white, #d0e1ff);
 }
+
 .weather-box img {
     display: block;
     margin: 0 auto;
@@ -55,8 +60,9 @@ main {
 .search-box {
     position: relative;
     width: 100%;
-    padding-right: 85px;
+    padding-right: 4rem;
 }
+
 .initial .search-box {
     padding-right: 0px;
 }
@@ -76,8 +82,8 @@ main {
     min-width: 75px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 1rem;
+    top: 2rem;
     transition: all 0.5s ease;
     z-index: 999;
 }
@@ -85,31 +91,41 @@ main {
     font-weight: 600;
 }
 .weather-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 300px;
+    overflow: hidden;
+}
+.dark .weather-icon{
+    /* opacity: 0.5; */
+}
+.weather-icon img{
+    position: absolute;
+    right: -8%;
+    top: -5%;
+    width: 100%;
+}
+.weather-desc {
     display: flex;
     align-items: flex-end;
     justify-content: center;
 }
-.weather-icon .weather {
-    background: #fff;
+.weather-desc .weather {
     padding: 3px 10px;
-    border: 1px solid #c8c8c8;
     line-height: 1;
     border-radius: 10px;
     font-weight: 600;
     font-size: 15px;
-    margin-bottom: 5%;
 }
 input.search-bar {
     text-align: center;
-    box-shadow: 1px 1px 2px #00000070;
+    /* box-shadow: 1px 1px 2px #00000070; */
     text-transform: capitalize;
     padding-left: 20px;
     padding-right: 20px;
     transition: all 0.5s ease;
-}
-.location-box .location,.location-box {
-    display: flex;
-    align-items: flex-start;
 }
 .location-box .location svg {
     margin-right: 5px;
@@ -126,12 +142,17 @@ input.search-bar {
 .weather-wrap {
     border-radius: 10px;
     position: relative;
-    background: #ffffff5e;
+    background: #d0e1ff;
     display: inline-block;
     width: 100%;
 }
 .dark .weather-wrap{
     background: #06050a33;
+}
+.weather-wrap .location-box,
+.weather-wrap .weather-box{
+    z-index: 1;
+    position: relative;
 }
 .clearBtn {
     float: right;
@@ -140,4 +161,7 @@ input.search-bar {
 }
 .tooltip {
     margin-top: 10px !important;
+}
+.suntime small{
+    text-transform: capitalize;
 }
