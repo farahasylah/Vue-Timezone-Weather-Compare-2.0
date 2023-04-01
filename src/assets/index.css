@@ -26,7 +26,6 @@ main {
 }
 .dark .weather-box {
     background: linear-gradient(180deg, #06050a33, #06050a00);
-
 }
 .weather-box {
     display: inline-block;
@@ -34,7 +33,6 @@ main {
     margin-top: 20px;
     background: linear-gradient(180deg, white, #d0e1ff);
 }
-
 .weather-box img {
     display: block;
     margin: 0 auto;
@@ -43,7 +41,6 @@ main {
     text-shadow: 1px 1px #afafaf;
     font-family: 'Oswald', sans-serif;
 }
-
 .weather-box svg {
     display: inline-block;
 }
@@ -61,7 +58,6 @@ main {
     width: 100%;
     padding-right: 4rem;
 }
-
 .initial .search-box {
     padding-right: 0px;
 }
@@ -120,7 +116,6 @@ main {
 }
 input.search-bar {
     text-align: center;
-    /* box-shadow: 1px 1px 2px #00000070; */
     text-transform: capitalize;
     padding-left: 20px;
     padding-right: 20px;

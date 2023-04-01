@@ -9,10 +9,10 @@
           {{ weatherItem.nearby_state ? weatherItem.nearby_state + ' , ': '' }} 
           {{ weatherItem.nearby_country }}</b></small>
 
-        <div class="location mb-4 text-3xl dark:text-white font-bold ">
+        <div class="location mb-4 text-3xl font-bold dark:text-white">
           {{ weatherItem.name }}, {{ weatherItem.country }}
         </div>
-        <div class="date dark:text-white text-md font-semibold text-left">
+        <div class="date text-md font-semibold text-left dark:text-white">
             <CalendarIcon class="h-4 w-4 inline-block"/>
             {{ weatherItem.datezone }} 
             <br> 
@@ -23,24 +23,27 @@
     
     <div class="weather-box p-6 pb-2 dark:text-white">
       <div class="weather-desc dark:text-black"  >
-        <div class="weather bg-sky-200"> {{ weatherItem.weather }} </div>
+        <div class="weather bg-sky-200"> 
+          {{ weatherItem.weather }} 
+        </div>
       </div>
-      <small class="italic">{{  weatherItem.desc }}</small>
+      <small class="italic">
+        {{  weatherItem.desc }}
+      </small>
       <div class="temp text-6xl mt-4 mb-2">
         {{ Math.round( weatherItem.temp ) }} °C 
       </div>
       <div class="text-md mb-2">
-        Feels like {{ Math.round( weatherItem.feels_like ) }} °C </div>
-      
+        Feels like {{ Math.round( weatherItem.feels_like ) }} °C 
+      </div>
       <div>
         Humidity : {{ weatherItem.humidity }}% , Wind : {{ weatherItem.wind }} m/s
       </div>
     </div>
-    <div class="suntime mt-4 dark:text-white grid grid-cols-2 gap-3 place-content-center">
+    <div class="suntime mt-4 grid grid-cols-2 gap-3 place-content-center dark:text-white">
       <SunTime name="sunrise" :time="weatherItem.sunrise"/>
       <SunTime name="sunset" :time="weatherItem.sunset"/>
     </div>
-
   </div>
 </template>
 <script>
