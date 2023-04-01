@@ -1,6 +1,9 @@
 <template>
-  <div class="appcontent scroll-smooth p-8" :class="{ 'dark' : darkmode }">
-    <a class="modebtn hover:bg-black hover:text-white dark:text-white dark:border-white dark:hover:bg-white dark:hover:text-black transition-colors" @click="darkMode" ref="btnModeRef" v-on:mouseenter="toggleTooltipMode()" v-on:mouseleave="toggleTooltipMode()" >
+  <div class="appcontent scroll-smooth p-8 pb-0" :class="{ 'dark' : darkmode }">
+    <a class="modebtn hover:bg-black hover:text-white dark:text-white dark:border-white dark:hover:bg-white dark:hover:text-black transition-colors" 
+    @click="darkMode" ref="btnModeRef" 
+    v-on:mouseenter="toggleTooltipMode()" 
+    v-on:mouseleave="toggleTooltipMode()" >
       <MoonIcon v-if="!darkmode" class="h-4 w-4 text-grey-400"/>
       <SunIcon v-else class="h-4 w-4 text-white-400"/>
       mode
@@ -11,89 +14,86 @@
       </div>
     </div>
 
-    <main class="" :class="{ 'initial' : weathers.length === 0}">
-      <LocationMarkerIcon v-if="weathers.length === 0" class="h-8 w-8 text-purple-500 inline-block animate-bounce"/>
-      <ClockIcon v-if="weathers.length === 0" class="h-8 w-8 text-purple-500 inline-block animate-bounce"/>
-      <CloudIcon v-if="weathers.length === 0" class="h-8 w-8 text-purple-500 inline-block animate-bounce"/>
-      <h1 v-if="weathers.length === 0" class="text-3xl font-semibold dark:text-white">Time & Weather</h1>
-      <h4 v-if="weathers.length === 0" class="dark:text-white text-lg mb-2.5">Enter location to find out what's the date, time and weather there.</h4>
+    <main class="pb-0" :class="{ 'initial' : weathers.length === 0}">
+      <template v-if="weathers.length === 0">
+        <LocationMarkerIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
+        <ClockIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
+        <CloudIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
+        <h1 class="text-3xl font-bold text-sky-700 dark:text-white">Time & Weather</h1>
+        <h4 class="dark:text-white text-lg mb-2.5">
+          Enter location to find out what's the date, time and weather there.</h4>
+      </template>
+
+      <p v-if="query != ''" class="text-red-600 italic">{{ message }}</p>
+      
       <div class="search-box" :class="{'mb-3.5' : weathers.length != 0}">
-        <div class="absolute inset-y-0 top-0 left-0 flex items-center pl-3 pointer-events-none">
-            <SearchIcon class="h-6 w-6 text-purple-400"> </SearchIcon>
+        <div class="absolute inset-y-0 top-0 left-0 flex items-center p-1 pl-3 pointer-events-none">
+            <SearchIcon class="h-6 w-6 text-sky-600"/>
         </div>
         <input 
-        v-model="query" 
-        @keypress="fetchWeather"
-        type="text" 
-        class="search-bar w-full border-2 border-purple-500 rounded-full p-1 " 
-        placeholder="Search location.."/>
-        <p v-if="query != ''" class="text-red-600 italic">{{ message }}</p>
-        <small v-if="weathers.length != 0"><button class="clearBtn dark:text-white hover:underline" @click="clearLocation()">
-          Clear all</button></small>
-      </div>
-      <small v-if="weathers.length === 0" class="dark:text-white italic">Example : New York</small>
-      <br>
-      <div class="weathers grid gap-3 lg:grid-cols-3 sm:grid-cols-1 ">
+          v-model="query" 
+          @keypress="fetchLocation"
+          type="text" 
+          class="search-bar w-full border-2 border-sky-600 rounded-full p-1" 
+          :placeholder="weathers.length >= 1 ? 'Search more location..' : 'Search location..'"/>
         
-        <div class="p-2 w-full"
+        <small v-if="weathers.length != 0">
+          <button class="clearBtn dark:text-white hover:underline" @click="clearLocation()">
+            Clear all
+          </button>
+        </small>
+        <div class="locResults absolute top-full left-0 w-full z-20 flex justify-center" 
+          :class="{'pr-16' : weathers.length > 0}" v-if="query">
+          <div class="block w-4/5 bg-white shadow rounded-bl-md rounded-br-md text-center">
+            <a class="block p-1.5 hover:bg-sky-200 cursor-pointer"
+              v-for="( loc,index ) in suggestedLocation" :key="index" @click="searchbyName(loc)">
+              <span>
+                {{ loc.name ? loc.name : ''}}
+                {{ loc.state ? '- ' + loc.state : ''}}
+                {{ loc.country ? ', ' + loc.country : ''}}
+              </span>
+            </a>
+        </div></div>
+      </div>
+
+      <small v-if="weathers.length === 0" class="dark:text-white italic">
+        Example : New York
+      </small>
+      <br>
+      
+      <div class="weathers grid gap-3 place-content-center grid-cols-3" :class="{'grid-cols-2': weathers.length === 2}">
+        
+        <div class="p-2 w-full" :class="{'col-start-2': weathers.length === 1}"
           v-for="( weatherItem, index ) in weathers" :key="index" stagger="50">
-          <div class="weather-wrap shadow rounded-lg text-center p-8">
-            <button class="transition transform hover:-translate-y-1 removeBtn bg-gray-400 text-white rounded-full hover:bg-gray-600 dark:bg-indigo-900 dark:hover:bg-gray-900" 
+          <div class="weather-wrap shadow rounded-lg text-center p-8 pb-4">
+            <button class="transition transform hover:-translate-y-1 removeBtn bg-gray-400 text-white rounded-full hover:bg-gray-600 dark:bg-indigo-900 dark:hover:bg-gray-900 z-10" 
               @click="deleteLocation(index)">
               <XIcon class="h-4 w-4 text-white"/>
             </button>
-            <div class="location-box text-left text-3xl dark:text-white font-bold justify-between">
-              <div>
-                <div class="location mb-4">
-                  <LocationMarkerIcon class="h-8 w-8 text-purple-400"/>
-                  {{ weatherItem.name }}<br> {{ weatherItem.country }}
-                </div>
-                <div class="date dark:text-white text-lg font-semibold text-left">
-                    <CalendarIcon class="h-4 w-4 inline-block"/>
-                    {{ weatherItem.datezone }} 
-                    <br> 
-                    <ClockIcon class="h-4 w-4 inline-block"/>
-                    {{ weatherItem.timezone }}
-                </div>
-              </div>
-               <img class="float-right h-32 w-32 bg-indigo-900" 
-               :src="'https://openweathermap.org/img/w/'+weatherItem.icon+'.png'"/>
-            </div>
-            
-            <div class="weather-box bg-slate-200 dark:bg-gray-400">
-              
-              <div class="weather-icon" >
-                <div class="weather"> {{ weatherItem.weather }} </div>
-              </div>
-              {{  weatherItem.desc }}
-              <div class="temp text-6xl mt-8 mb-4">
-                {{ Math.round(weatherItem.temp) }} °C 
-              </div>
-              <div class="text-md">
-                Feels like {{ Math.round(weatherItem.feels_like) }} °C </div>
-              
-            </div>
+            <WeatherBox :darkmode="darkmode" :weatherItem="weatherItem"/>
           </div>
         </div>
       </div>
-
     </main>
   </div>
 
 </template>
 
 <script>
-import { ClockIcon, LocationMarkerIcon,XIcon,MoonIcon,SunIcon, SearchIcon, CloudIcon, CalendarIcon } from '@heroicons/vue/outline'
+import { ClockIcon, LocationMarkerIcon,XIcon,MoonIcon,SunIcon, SearchIcon, CloudIcon } from '@heroicons/vue/outline'
 import moment from 'moment-timezone'
 import { createPopper } from "@popperjs/core"
+import WeatherBox from './components/WeatherBox.vue'
 export default {
   name: 'app',
   data() {
     return {
       api_key: '207a1e6a9123b10b4ae0a07ca97f6692',
       url_base: 'http://api.openweathermap.org/data/2.5/',
+      loc_base: 'http://api.openweathermap.org/geo/1.0/',
       darkmode: false,
       query: '',
+      suggestion: [],
       weathers: [],
       message: '',
       tooltipMode: false,
@@ -104,55 +104,82 @@ export default {
     for (const [i, value] of this.weathers) {
         console.log('%d: %s', i, value);
     }
-    this.weathers.forEach(function(weather) {
-      console.log(weather.name);
-      // fetch( `${this.url_base}weather?q=${weather.name}&units=metric&APPID=${this.api_key}` )
-      //     .then( response => {
-      //         return response.json();   
-      //         console.log(response.json());
-      //         this.weathers.push(response);
-      //     })
-      // this.getAllData(weather.name);
-    });
+  },
+  computed: {
+    suggestedLocation() {
+      return this.suggestion.length > 0 ? this.suggestion : 0
+    },
   },
   methods :{
-    async getAllData(query) {
-      try {
-        const res = await fetch( `${this.url_base}weather?q=${query}&units=metric&APPID=${this.api_key}` );
-
-        if (!res.ok) {
-          // const message = `An error has occured: ${res.status} - ${res.statusText}`;
-          const message = `${res.statusText}`;
-          throw new Error(message);
+    async searchbyName(loc) {
+      if ( this.query ){
+        try {
+          let locquery = loc.name + (loc.state ? ',' + loc.state : '') + ',' + loc.country;
+          locquery = locquery.split(" ").join("+");
+          const res = await fetch( `${this.url_base}weather?q=${locquery}&units=metric&APPID=${this.api_key}` );
+          if (!res.ok) {
+            this.searchbyLoc(loc);
+          }
+          const data = await res.json()
+          if(loc.country != data.sys.country ){
+            this.searchbyLoc(loc);
+          }
+          else{
+            this.locationResult(data);
+          }
+        } catch (err) {
+          return 0;
         }
-
-        const data = await res.json();
-        this.locationResult(data);
-
-        // const result = {
-        //   status: res.status + "-" + res.statusText,
-        //   headers: {
-        //     "Content-Type": res.headers.get("Content-Type"),
-        //     "Content-Length": res.headers.get("Content-Length"),
-        //   },
-        //   length: res.headers.get("Content-Length"),
-        //   data: data,
-        // };
-
-
-        // this.getResult = this.fortmatResponse(result);
-      } catch (err) {
-        this.message = err.message;
       }
     },
-    async fetchWeather ( e ) {
-      if ( e.key == "Enter" && this.query ){
-        this.getAllData(this.query);
-        // fetch( `${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}` )
-        //   .then( response => {
-        //       return response.json();   
-        //   }).then( this.locationResult );
+    async searchbyLoc  ( loc ) {
+      if ( this.query ){
+        try {
+          const res = await fetch( `${this.url_base}weather?lat=${loc.lat}&lon=${loc.lon}&units=metric&APPID=${this.api_key}` );
+          if (!res.ok) {
+            const message = `${res.statusText}`;
+            throw new Error(message);
+          }
+          else{
+            let data = await res.json();
+            if(loc.name != data.name){
+              data["nearby"] = { "name" : loc.name, "state" : loc.state, "country" : loc.country};
+            }
+              this.locationResult(data);
+          }
+          
+        } catch (err) {
+          this.message = err.message;
+        }
       }
+    },
+    async fetchLocation ( e ) {
+      if ( e.key == "Enter" || this.query ){
+        this.suggestion = [];
+        this.message = '';
+        this.query.replace(/ /g,"+");
+          try {
+            const res = await fetch( `${this.loc_base}direct?q=${this.query}&limit=5&appid=${this.api_key}` );
+            if (!res.ok) {
+              const message = `${res.statusText}`;
+              throw new Error(message);
+            }
+            else{
+              const data = await res.json();
+              if(data.length != 0){
+                this.suggestion.push(data);
+                this.suggestion = this.suggestion[0];
+              }
+            }
+          } catch (err) {
+            // this.message = err.message;
+          }
+        
+      }
+    },
+    getTime(time){
+      let date = new Date(time * 1000);
+      return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
     },
     getTimeZone(timezone){
       return moment().utcOffset(timezone).format("h.mm a");
@@ -162,38 +189,31 @@ export default {
       let date = moment().utcOffset(timezone).format('Do MMMM YYYY');
       return `${day} ${date}`;
     },
-    saveResult(result){
-      let timezone = result.timezone / 60;
-      this.weathers.push({ 
-          name: result.name, 
-          country: result.sys.country, 
-          weather: result.weather[0].main,
-          desc: result.weather[0].description,
-          icon: result.weather[0].icon,
-          temp: result.main.temp,
-          feels_like: result.main.feels_like,
-          timezone: this.getTimeZone(timezone),
-          datezone: this.getDateZone(timezone),
-        });
-    },
     locationResult (result) {
       let repeated = this.weathers.some(e => e.name === result.name);
       if(result.main != 'undefined' && !repeated){
         let timezone = result.timezone / 60;
         this.weathers.push({ 
           name: result.name, 
-          country: result.sys.country, 
+          country: result.sys.country,
+          state: result.sys.state,
           weather: result.weather[0].main,
           desc: result.weather[0].description,
           icon: result.weather[0].icon,
           temp: result.main.temp,
           feels_like: result.main.feels_like,
+          humidity: result.main.humidity,
+          wind: result.wind.speed,
           timezone: this.getTimeZone(timezone),
           datezone: this.getDateZone(timezone),
+          sunrise: this.getTime(result.sys.sunrise),
+          sunset: this.getTime(result.sys.sunset),
+          nearby_name : result.nearby ? result.nearby.name : '',
+          nearby_state : result.nearby ? result.nearby.state : '', 
+          nearby_country : result.nearby ? result.nearby.country : '',
         });
         this.query = '';
       }
-      
     },
     deleteLocation (index){
       this.weathers.splice(index,1)
@@ -213,6 +233,6 @@ export default {
       }
     },
   },
-  components: { ClockIcon,LocationMarkerIcon, XIcon, MoonIcon,SunIcon, SearchIcon, CloudIcon, CalendarIcon }
+  components: { ClockIcon,LocationMarkerIcon, XIcon, MoonIcon,SunIcon, SearchIcon, CloudIcon, WeatherBox}
 }
 </script>
