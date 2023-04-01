@@ -12,7 +12,7 @@
         <div class="location mb-4 text-3xl dark:text-white font-bold ">
           {{ weatherItem.name }}, {{ weatherItem.country }}
         </div>
-        <div class="date dark:text-white text-lg font-semibold text-left">
+        <div class="date dark:text-white text-md font-semibold text-left">
             <CalendarIcon class="h-4 w-4 inline-block"/>
             {{ weatherItem.datezone }} 
             <br> 
@@ -21,7 +21,7 @@
         </div>
     </div>
     
-    <div class="weather-box dark:text-white">
+    <div class="weather-box p-6 pb-2 dark:text-white">
       <div class="weather-desc dark:text-black"  >
         <div class="weather bg-sky-200"> {{ weatherItem.weather }} </div>
       </div>

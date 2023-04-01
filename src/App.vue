@@ -19,7 +19,7 @@
         <LocationMarkerIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
         <ClockIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
         <CloudIcon class="h-8 w-8 text-sky-600 inline-block animate-bounce"/>
-        <h1 class="text-3xl font-bold text-sky-700 dark:text-white">Time & Weather</h1>
+        <h1 class="text-3xl font-bold dark:text-white">Time & Weather</h1>
         <h4 class="dark:text-white text-lg mb-2.5">
           Enter location to find out what's the date, time and weather there.</h4>
       </template>
@@ -57,15 +57,13 @@
       </div>
 
       <small v-if="weathers.length === 0" class="dark:text-white italic">
-        Example : New York
+        Example : London
       </small>
       <br>
-      
-      <div class="weathers grid gap-3 place-content-center grid-cols-3" :class="{'grid-cols-2': weathers.length === 2}">
-        
-        <div class="p-2 w-full" :class="{'col-start-2': weathers.length === 1}"
-          v-for="( weatherItem, index ) in weathers" :key="index" stagger="50">
-          <div class="weather-wrap shadow rounded-lg text-center p-8 pb-4">
+      <div class="weathers grid gap-2 lg:gap-3 justify-items-center place-content-center grid-cols-1 lg:grid-cols-3" :class="{'lg:grid-cols-1': weathers.length === 1, 'lg:grid-cols-2': weathers.length === 2}">
+        <div class="p-2 " :class="{'w-full': weathers.length >= 2}"
+          v-for="( weatherItem, index ) in weathers" :key="index">
+          <div class="weather-wrap shadow rounded-lg text-center p-6 md:p-8 md:pb-2">
             <button class="transition transform hover:-translate-y-1 removeBtn bg-gray-400 text-white rounded-full hover:bg-gray-600 dark:bg-indigo-900 dark:hover:bg-gray-900 z-10" 
               @click="deleteLocation(index)">
               <XIcon class="h-4 w-4 text-white"/>

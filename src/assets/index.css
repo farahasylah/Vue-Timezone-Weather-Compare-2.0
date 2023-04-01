@@ -30,7 +30,6 @@ main {
 }
 .weather-box {
     display: inline-block;
-    padding: 20px 30px;
     border-radius: 50% 50% 10px 10px;
     margin-top: 20px;
     background: linear-gradient(180deg, white, #d0e1ff);
@@ -99,7 +98,7 @@ main {
     overflow: hidden;
 }
 .dark .weather-icon{
-    /* opacity: 0.5; */
+    opacity: 0.5;
 }
 .weather-icon img{
     position: absolute;
