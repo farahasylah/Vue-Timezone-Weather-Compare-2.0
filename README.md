@@ -1,5 +1,7 @@
 # Compare Time & Weather at Location app 2.0
-- Open Weather Map API (By name and geocoding latitude & longitude)
+Find out the date, time and weather statistics of the location at / nearest to your city.
+
+- Open Weather Map API (By City names & Geocoding latitude & longitude)
 - Tailwind CSS
 - moment-timezone by Moment.js
 - icons by Heroicons
