@@ -92,7 +92,7 @@ export default {
   name: 'app',
   data() {
     return {
-      api_key: '207a1e6a9123b10b4ae0a07ca97f6692',
+      api_key: '',
       url_base: 'http://api.openweathermap.org/data/2.5/',
       loc_base: 'http://api.openweathermap.org/geo/1.0/',
       darkmode: false,
